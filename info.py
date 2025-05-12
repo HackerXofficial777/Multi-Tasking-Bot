@@ -24,3 +24,4 @@ LOG_TEXT = """<i><u>👁️‍🗨️USER DETAILS</u>
 ○ UserName : @{username}
 
 By = {bot}</i>"""
+SPIDEY_CHANNEL = int(environ.get('SPIDEY_CHANNEL', '-1002423451263'))

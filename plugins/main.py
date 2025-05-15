@@ -8,85 +8,32 @@ from pyrogram.errors import UserNotParticipant, ChatAdminRequired
 
 @Client.on_message(filters.private & filters.command("start"))
 async def start_message(bot, message):
-    user_id = message.from_user.id
-    not_joined = []
-
-    # Check multiple channel subscription
-    for channel in FORCE_SUB:
-        try:
-            await bot.get_chat_member(channel, user_id)
-        except UserNotParticipant:
-            not_joined.append(channel)
-        except ChatAdminRequired:
-            return await message.reply_text(f"❌ I don't have permission to check users in `{channel}`. Make me admin.")
-
-    if not_joined:
-        buttons = []
-        for ch in not_joined:
-            buttons.append([InlineKeyboardButton(f"✅ Join {ch}", url=f"https://t.me/{ch}")])
-        buttons.append([InlineKeyboardButton("♻️ Check Again", callback_data="refreshMultiSub")])
-
-        return await message.reply_text(
-            "**To use this bot, you must join all required channels first:**",
-            reply_markup=InlineKeyboardMarkup(buttons)
-        )
-
-    # Save user if new
-    if not await db.is_user_exist(user_id):
-        await db.add_user(user_id)
-        if LOG_CHANNEL:
+    if not await db.is_user_exist(message.from_user.id):
+        await db.add_user(message.from_user.id)
+        if LOG_CHANNEL is not None:            
             await bot.send_message(LOG_CHANNEL,
-                text=LOG_TEXT.format(
-                    id=user_id,
+                text=LOG_TEXT.format(id=message.from_user.id,
                     dc_id=message.from_user.dc_id,
                     first_name=message.from_user.first_name,
                     username=message.from_user.username,
-                    bot=bot.mention
-                )
+                    bot=bot.mention)
             )
-
-    # Send main welcome message
-    buttons = InlineKeyboardMarkup([[
-        InlineKeyboardButton("⚙️ ꜱᴜᴩᴩᴏʀᴛ", url="https://t.me/silicon_Botz")
-    ], [
-        InlineKeyboardButton("⚡ ʜᴇʟᴩ", callback_data="help"),
-        InlineKeyboardButton("📃 ᴀʙᴏᴜᴛ", callback_data="about")
-    ], [
-        InlineKeyboardButton("📢 ᴜᴩᴅᴀᴛᴇꜱ", url="https://t.me/Silicon_Bot_Update")
-    ]])
+    
+    button = InlineKeyboardMarkup([[
+           InlineKeyboardButton("⚙️ ꜱᴜᴩᴩᴏʀᴛ", url="https://t.me/spideyofficial_777")               
+               ],[            
+           InlineKeyboardButton("⚡ ʜᴇʟᴩ", callback_data="help"),
+           InlineKeyboardButton("📃 ᴀʙᴏᴜᴛ", callback_data="about") 
+               ],[
+           InlineKeyboardButton("📢 ᴜᴩᴅᴀᴛᴇꜱ", url="https://t.me/SpideyOfficialUpdatez")
+              ]])
 
     await message.reply_photo(
         photo=random.choice(PICS),
         caption=txt.STAT.format(message.from_user.mention),
-        reply_markup=buttons,
+        reply_markup=button,
         parse_mode=enums.ParseMode.HTML
     )
-
-@Client.on_callback_query(filters.regex("refreshMultiSub"))
-async def recheck_multi_sub(bot, query):
-    user_id = query.from_user.id
-    not_joined = []
-
-    for channel in FORCE_SUB:
-        try:
-            await bot.get_chat_member(channel, user_id)
-        except UserNotParticipant:
-            not_joined.append(channel)
-
-    if not_joined:
-        buttons = []
-        for ch in not_joined:
-            buttons.append([InlineKeyboardButton(f"✅ Join {ch}", url=f"https://t.me/{ch}")])
-        buttons.append([InlineKeyboardButton("♻️ Check Again", callback_data="refreshMultiSub")])
-
-        await query.message.edit_text(
-            "**You still need to join all required channels:**",
-            reply_markup=InlineKeyboardMarkup(buttons)
-        )
-        await query.answer("❌ You haven't joined all required channels.", show_alert=True)
-    else:
-        await query.message.delete()
-        await start_message(bot, query.message)
 
                                               
 @Client.on_message(filters.command(["id", "info"]))
@@ -116,8 +63,8 @@ async def media_info(bot, m):
                                         
     if not md:
         buttons = [[
-            InlineKeyboardButton("✨️ sᴜᴘᴘᴏʀᴛ", url="https://t.me/silicon_botz"),
-            InlineKeyboardButton("📢 ᴜᴘᴅᴀᴛᴇ", url="https://t.me/silicon_Bot_Update")
+            InlineKeyboardButton("✨️ sᴜᴘᴘᴏʀᴛ", url="https://t.me/spideyofficial777"),
+            InlineKeyboardButton("📢 ᴜᴘᴅᴀᴛᴇ", url="https://t.me/SpideyOfficialUpdatez")
         ]]       
         silicon = await m.reply("please wait....")
         if ff.photo:

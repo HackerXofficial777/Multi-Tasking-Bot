@@ -42,13 +42,13 @@ async def link_handler(Mbot, message):
                 if "story" in media.get("type", "").lower():
                     sent = await message.reply_video(
                         video_url,
-                        caption=f"<b>Instagram Story</b>\n\n<b>ᴅᴏᴡɴʟᴏᴀᴅᴇᴅ ʙʏ @SpideyCinemaX_AI_Bot</b>",
+                        caption=f"<b>Instagram Story</b>\n\n<b><blockquote>🌿 ᴅᴏᴡɴʟᴏᴀᴅᴇᴅ ʙʏ <a href='https://telegram.me/spidey_multi_tasking_robot'>@sᴘɪᴅᴇʏ_ᴍᴜʟᴛɪ_ᴛᴀsᴋɪɴɢ_ʀᴏʙᴏᴛ</a></blockquote></b>",
                         reply_markup=buttons
                     )
                 else:
                     sent = await message.reply_video(
                         video_url,
-                        caption=f"<b>{caption}</b>\n\n<b>ᴅᴏᴡɴʟᴏᴀᴅᴇᴅ ʙʏ @SpideyCinemaX_AI_Bot</b>",
+                        caption=f"<b>{caption}</b>\n\n<b><blockquote>🌿 ᴅᴏᴡɴʟᴏᴀᴅᴇᴅ ʙʏ <a href='https://telegram.me/spidey_multi_tasking_robot'>@sᴘɪᴅᴇʏ_ᴍᴜʟᴛɪ_ᴛᴀsᴋɪɴɢ_ʀᴏʙᴏᴛ</a></blockquote></b>",
                         reply_markup=buttons
                     )
 
@@ -56,7 +56,7 @@ async def link_handler(Mbot, message):
                     await sent.copy(DUMP_GROUP)
                 return
 
-        await message.reply("Failed to fetch.")
+        await message.reply("Oops! ⚠️ Failed to fetch — Please try again later! ✨")
 
     except Exception as e:
         await message.reply(f"<b>400: 🚫 Error:</b> {str(e)}")

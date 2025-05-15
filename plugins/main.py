@@ -12,7 +12,7 @@ async def start_message(bot, message):
     not_joined = []
 
     # Check multiple channel subscription
-    for channel in FORCE_SUB_CHANNELS:
+    for channel in FORCE_SUB:
         try:
             await bot.get_chat_member(channel, user_id)
         except UserNotParticipant:
@@ -67,7 +67,7 @@ async def recheck_multi_sub(bot, query):
     user_id = query.from_user.id
     not_joined = []
 
-    for channel in FORCE_SUB_CHANNELS:
+    for channel in FORCE_SUB:
         try:
             await bot.get_chat_member(channel, user_id)
         except UserNotParticipant:
